@@ -38,7 +38,7 @@ namespace Labirint
             {
 
             }
-            else if (comboBox2.SelectedItem.ToString() == "Рандомный")
+            else if (comboBox2.SelectedItem.ToString() == "Рандомные проходы")
             {
                 map = new RandomLabirint(Convert.ToInt32(comboBox1.SelectedItem), Convert.ToInt32(comboBox3.SelectedItem), 10, pictureBox1, checkBox1.Checked);
             }
@@ -251,14 +251,15 @@ class PerfectLabirint : LabirintBase
         numbVisited++;
         while (((widthCellMap - 1) / 2) * ((heightCellMap - 1) / 2) > numbVisited) 
         {  
+            Cell p = cells.Peek();
             List<Cell> cellForRandomPick = new List<Cell>();
             if (cells.Peek().LocalX < widthCellMap - 2 && !itsVisited[cells.Peek().LocalX + 2, cells.Peek().LocalY]) 
             {
-                cellForRandomPick.Add(Cells[cells.Peek().LocalX + 2, cells.Peek().LocalY]);
+                cellForRandomPick.Add(Cells[p.LocalX + 2, p.LocalY]);
             }
             if (cells.Peek().LocalY < heightCellMap - 2 && !itsVisited[cells.Peek().LocalX, cells.Peek().LocalY + 2]) 
             {
-                cellForRandomPick.Add(Cells[cells.Peek().LocalX, cells.Peek().LocalY + 2]);
+                cellForRandomPick.Add(Cells[p.LocalX, cells.Peek().LocalY + 2]);
             }
             if (cells.Peek().LocalX  > 1 && !itsVisited[cells.Peek().LocalX - 2, cells.Peek().LocalY]) 
             {
