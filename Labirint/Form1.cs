@@ -5,14 +5,19 @@ using System.Drawing.Text;
 using System.Runtime.CompilerServices;
 using System.Security;
 using System.Windows.Forms;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Labirint
 {
     public partial class Form1 : Form
     {
+        CellMapPicture map;
         public Form1()
         {
             InitializeComponent();
+            comboBox1.SelectedIndex = 0;
+            comboBox2.SelectedIndex = 0;
+            comboBox3.SelectedIndex = 0;
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -21,22 +26,62 @@ namespace Labirint
 
         private void button1_Click(object sender, EventArgs e)
         {
-            /*pictureBox1.Image = new Bitmap(pictureBox1.Width, pictureBox1.Height);
-            Graphics g = Graphics.FromImage(pictureBox1.Image);
-            Pen pen = new Pen(Color.Aqua, 5f);
-            g.DrawRectangle(pen, 0, 0, pictureBox1.Width - pen.Width / 2, pictureBox1.Height - pen.Width / 2);
-            pictureBox1.Update();
-            pictureBox1.Image.Save("testimg.png", System.Drawing.Imaging.ImageFormat.Png);*/
-            int comboBoxSel = Convert.ToInt32(comboBox1.SelectedItem);
-            PerfectLabirint map = new PerfectLabirint(comboBoxSel,comboBoxSel,10, pictureBox1,false,true);
+            if (comboBox2.SelectedItem.ToString() == "Идеальный")
+            {
+                map = new PerfectLabirint(Convert.ToInt32(comboBox1.SelectedItem), Convert.ToInt32(comboBox3.SelectedItem), 10, pictureBox1, checkBox1.Checked, checkBox2.Checked);
+            }
+            else if (comboBox2.SelectedItem.ToString() == "Плетенный")
+            {
+
+            }
+            else if (comboBox2.SelectedItem.ToString() == "Одномаршрутный")
+            {
+
+            }
+            else if (comboBox2.SelectedItem.ToString() == "Рандомный")
+            {
+                map = new RandomLabirint(Convert.ToInt32(comboBox1.SelectedItem), Convert.ToInt32(comboBox3.SelectedItem), 10, pictureBox1, checkBox1.Checked);
+            }
             map.Generate();
             map.Draw();
-            map.Save();
+            button2.Enabled = true;
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
+            map.Save();
+        }
 
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox2.SelectedItem.ToString() == "Идеальный")
+            {
+                checkBox1.Checked = true;
+                checkBox1.Enabled = true;
+                checkBox2.Checked = true;
+                checkBox2.Enabled = true;
+            }
+            else if (comboBox2.SelectedItem.ToString() == "Плетенный")
+            {
+                checkBox1.Checked = true;
+                checkBox1.Enabled = true;
+                checkBox2.Checked = true;
+                checkBox2.Enabled = true;
+            }
+            else if (comboBox2.SelectedItem.ToString() == "Одномаршрутный")
+            {
+                checkBox1.Checked = true;
+                checkBox1.Enabled = true;
+                checkBox2.Checked = false;
+                checkBox2.Enabled = false;
+            }
+            else if (comboBox2.SelectedItem.ToString() == "Рандомный")
+            {
+                checkBox1.Checked = true;
+                checkBox1.Enabled = true;
+                checkBox2.Checked = false;
+                checkBox2.Enabled = false;
+            }
         }
     }
 
@@ -101,7 +146,22 @@ namespace Labirint
         }
         public void Save()
         {
-            pictureBox.Image.Save("testimg.png", System.Drawing.Imaging.ImageFormat.Png);
+            SaveFileDialog savedialog = new SaveFileDialog();
+            savedialog.Title = "Сохранить картинку как...";
+            savedialog.OverwritePrompt = true;
+            savedialog.CheckPathExists = true;
+            savedialog.Filter = "Image Files(*.BMP)|*.BMP|Image Files(*.JPG)|*.JPG|Image Files(*.GIF)|*.GIF|Image Files(*.PNG)|*.PNG|All files (*.*)|*.*";
+            if (savedialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    pictureBox.Image.Save(savedialog.FileName, System.Drawing.Imaging.ImageFormat.Png);
+                }
+                catch
+                {
+                    MessageBox.Show("Невозможно сохранить изображение", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
 
     }
@@ -222,8 +282,12 @@ class PerfectLabirint : LabirintBase
                             Cells[(cellsCopy[i].LocalX+ cellsCopy[i-1].LocalX)/2, (cellsCopy[i-1].LocalY + cellsCopy[i].LocalY) / 2].color = Color.LightBlue;
                         }
                     }
-                    Cells[startCell.LocalX,startCell.LocalY].color = Color.Green;
-                    Cells[endCell.LocalX, endCell.LocalY].color = Color.Red;
+                    if(displaySpecialDots)
+                    {
+                        Cells[startCell.LocalX, startCell.LocalY].color = Color.Green;
+                        Cells[endCell.LocalX, endCell.LocalY].color = Color.Red;
+
+                    }
                 }
             }
             if (cellForRandomPick.Count != 0)
