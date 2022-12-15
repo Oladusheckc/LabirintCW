@@ -59,7 +59,7 @@
             this.comboBox1.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Items.AddRange(new object[] {
-            "5",
+            "4",
             "10",
             "20",
             "50",
@@ -117,7 +117,7 @@
             this.comboBox3.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox3.FormattingEnabled = true;
             this.comboBox3.Items.AddRange(new object[] {
-            "5",
+            "4",
             "10",
             "20",
             "50",
@@ -145,9 +145,9 @@
             this.checkBox1.AutoSize = true;
             this.checkBox1.Location = new System.Drawing.Point(9, 136);
             this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(112, 19);
+            this.checkBox1.Size = new System.Drawing.Size(136, 19);
             this.checkBox1.TabIndex = 8;
-            this.checkBox1.Text = "Создание точек";
+            this.checkBox1.Text = "Отображение точек";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // comboBox2
@@ -212,6 +212,7 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 4;
             this.pictureBox1.TabStop = false;
+            this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
             // 
             // Form1
             // 
