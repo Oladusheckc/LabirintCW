@@ -153,7 +153,6 @@ namespace Labirint.LabirintsClasses
             public bool visited = false;
             public Cell cell;
             public LinkedCell link;
-
             public override bool Equals(object? obj)
             {
                 if(cell.Equals((obj as LinkedCell).cell))
