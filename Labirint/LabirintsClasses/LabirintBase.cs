@@ -37,8 +37,9 @@ namespace Labirint.LabirintsClasses
         }
         public void MouseClickOnLabirint(PictureBox pb, MouseEventArgs e)
         {
-            Cell bufCell = Cells[(int)(((float)e.Location.X / pb.Width) * widthPixelMap) / scale,
-                    (int)(((float)e.Location.Y / pb.Height) * heightPixelMap) / scale];
+            double k = Math.Min(1.0 * pb.Width / widthPixelMap, 1.0 * pb.Height / heightPixelMap);
+            Cell bufCell = Cells[(int)((e.Location.X - (pb.Width / 2 - widthPixelMap / 2 * k)) / k) / scale,
+        (int)((e.Location.Y - (pb.Height / 2 - heightPixelMap / 2 * k)) / k) / scale];
             if (bufCell.color != Color.Black)
             {
                 foreach (Cell cl in Cells)
@@ -58,6 +59,7 @@ namespace Labirint.LabirintsClasses
                 }
                 Draw();
             }
+
         }
         public override void Draw()
         {
