@@ -74,7 +74,7 @@ namespace Labirint.LabirintsClasses
             }
             base.Draw();
         }
-        protected void searchWay()
+        protected void searchWayTest()
         {
             int[,] waypoint = new int[widthCellMap, heightCellMap];
             foreach(Cell cl in Cells)
@@ -143,7 +143,81 @@ namespace Labirint.LabirintsClasses
                 Cells[cl.X, cl.Y] = cl;
             }
         }
-        
+        class LinkedCell
+        {
+            public LinkedCell(Cell cell, LinkedCell link)
+            {
+                this.cell = cell;
+                this.link = link;
+            }
+            public bool visited = false;
+            public Cell cell;
+            public LinkedCell link;
+
+            public override bool Equals(object? obj)
+            {
+                if(cell.Equals((obj as LinkedCell).cell))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+        protected void searchWay()
+        {
+            int[,] waypoint = new int[widthCellMap, heightCellMap];
+            Stack<LinkedCell> CellVisited = new Stack<LinkedCell>();
+            Queue<LinkedCell> waySearch = new Queue<LinkedCell>();
+            waySearch.Enqueue(new LinkedCell(startCell, null));
+            while (waySearch.Count != 0)
+            {
+                LinkedCell cell = waySearch.Dequeue();
+                if(!CellVisited.Contains(cell))
+                {
+                    if (cell.cell.X < widthCellMap && Cells[cell.cell.X + 1, cell.cell.Y].color != Color.Black)
+                    {
+                        waySearch.Enqueue(new LinkedCell(Cells[cell.cell.X + 1, cell.cell.Y], cell));
+                    }
+                    if (cell.cell.Y < heightCellMap && Cells[cell.cell.X, cell.cell.Y + 1].color != Color.Black)
+                    {
+                        waySearch.Enqueue(new LinkedCell(Cells[cell.cell.X, cell.cell.Y + 1], cell));
+                    }
+                    if (cell.cell.X > 0 && Cells[cell.cell.X - 1, cell.cell.Y].color != Color.Black)
+                    {
+                        waySearch.Enqueue(new LinkedCell(Cells[cell.cell.X - 1, cell.cell.Y], cell));
+                    }
+                    if (cell.cell.Y > 0 && Cells[cell.cell.X, cell.cell.Y - 1].color != Color.Black)
+                    {
+                        waySearch.Enqueue(new LinkedCell(Cells[cell.cell.X, cell.cell.Y - 1], cell));
+                    }
+                }
+                CellVisited.Push(cell);
+                if (cell.cell.X == endCell.X && cell.cell.Y == endCell.Y)
+                {
+                    break;
+                }
+            }
+            Stack<Cell> way = new Stack<Cell>();
+            LinkedCell LastCell = CellVisited.Pop();
+            while (true)
+            {
+                LastCell.cell.color = Color.PowderBlue; 
+                way.Push(LastCell.cell);
+                if (LastCell.cell.X == startCell.X && LastCell.cell.Y == startCell.Y)
+                {
+                    break;
+                }
+                LastCell = LastCell.link;
+            }
+            foreach (Cell cl in way)
+            {
+                Cells[cl.X, cl.Y] = cl;
+            }
+        }
+
     }
 }
 
